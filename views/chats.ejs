@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chats App</title>
+    <link rel="stylesheet" href="/allChat.css" />
+
+  </head>
+
+  <body>
+    <h1 class="mainheading">All Chats</h1>
+
+
+    <input
+      type="text"
+      id="searchBar"
+      placeholder="Search..."
+      oninput="searchChats()"
+    />
+
+    <form action="/chats/new" method="get">
+      <button class="addButton">New Chat</button>
+    </form>
+
+    <div class="mainbox" id="chatsContainer">
+      <!-- Chat boxes will be displayed here -->
+      <% for(let chat of chats){ %>
+      <div class="msgBox">
+        <p>From: <%= chat.from %></p>
+        <div class="msg">
+          <p>
+            <strong>Message:</strong>
+            <%= chat.msg %>
+          </p>
+          <form action="/chats/<%=chat._id%>/edit" method="get">
+            <button class="editbtn">Edit</button>
+          </form>
+          <form method="POST" action="/chats/<%=chat._id%>?_method=DELETE">
+            <button class="Deletebtn">Delete</button>
+          </form>
+        </div>
+        <p>To: <%= chat.to %></p>
+        <div class="timeDate">
+          <p><%= chat.timestamp.toString().split(" ")[4] %></p>
+          <p>
+            <%= chat.timestamp.toString().split(" ").splice(0 , 4).join(" ") %>
+          </p>
+        </div>
+      </div>
+      <% } %>
+    </div>
+
+    <script src="/searchuser.js">
+     
+    </script>
+  </body>
+</html>

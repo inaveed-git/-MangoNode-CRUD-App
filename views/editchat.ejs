@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="/editChat.css" />
+  </head>
+  <body>
+
+    <form method="POST" action="/chats/<%=chatid._id%>?_method=PUT">
+      <h1>Edit Form</h1>
+
+      <div class="form-group">
+        <label for="from">Your Name:</label>
+        <input
+          type="text"
+          name="from"
+          id="from"
+          placeholder="Enter your name"
+          value=" <%= chatid.from %> "
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="msg">Your Message:</label>
+        <textarea
+          name="msg"
+          id="msg"
+          cols="30"
+          rows="5"
+          placeholder="Enter your message"
+          required
+        >
+ <%= chatid.msg %>  </textarea
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="to">Receiver's Name:</label>
+        <input
+          type="text"
+          name="to"
+          id="to"
+          placeholder="Enter receiver's name"
+          value="<%= chatid.to %>"
+          required
+        />
+      </div>
+
+      <button>Edit</button>
+    </form>
+
+  </body>
+</html>
