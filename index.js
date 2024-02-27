@@ -3,9 +3,9 @@ const mongoose = require("mongoose");
 const path = require("path");
 
 const Chat = require("./models/chat.js");
-var methodOverride = require("method-override");
+const methodOverride = require("method-override");
 const { toUSVString } = require("util");
-
+const ExpressError = require("./ExpressError.js");
 const app = express();
 const port = 8080;
 
@@ -34,14 +34,31 @@ async function main() {
   }
 }
 
+// const wrapAsync = (fn) => {
+//   return function () {
+//     fn(req, res, next).catch((err) => next(err));
+//   };
+// };
+
+
+
+const wrapAsync = (fn) => {
+  return function (req, res, next) {
+    fn(req, res, next).catch((err) => next(err));
+  };
+};
+
 app.get("/", (req, res) => {
   res.send("This is connected");
 });
 
-app.get("/chats", async (req, res) => {
-  let chats = await Chat.find();
-  res.render("chats.ejs", { chats });
-});
+app.get(
+  "/chats",
+  wrapAsync(async (req, res) => {
+    let chats = await Chat.find();
+    res.render("chats.ejs", { chats });
+  })
+);
 
 app.get("/chats/new", (req, res) => {
   res.render("newChat.ejs");
@@ -68,14 +85,27 @@ app.post("/chats", (req, res) => {
   res.redirect("/chats");
 });
 
-app.get("/chats/:id/edit", async (req, res) => {
+app.get("/chats/:id/edit", wrapAsync( async (req, res) => {
   let { id } = req.params;
 
   let chatid = await Chat.findById(id);
   res.render("editchat.ejs", { chatid });
-});
+})
+);
 
-app.put("/chats/:id", async (req, res) => {
+app.get("/chats/:id/show", wrapAsync( async (req, res, next) => {
+  let { id } = req.params;
+  let chatid = await Chat.findById(id);
+
+  if (!chatid) {
+    return next(new ExpressError(404, "Chat not found"));
+  }
+
+  res.render("view.ejs", { chatid });
+})
+);
+
+app.put("/chats/:id",wrapAsync( async (req, res) => {
   let { id } = req.params;
   let { msg: newmsg, to: newto, from: newfrom } = req.body;
 
@@ -87,13 +117,21 @@ app.put("/chats/:id", async (req, res) => {
 
   console.log(updatechat);
   res.redirect("/chats");
-});
+})
+);
 
-app.delete("/chats/:id", async (req, res) => {
+app.delete("/chats/:id",wrapAsync( async (req, res) => {
   let { id } = req.params;
   let deletechat = await Chat.findByIdAndDelete(id);
   res.redirect("/chats");
-});
+})
+);
+
+app.use((err, req, res, next) => {
+  let { status = 500, message = "Some Error Occured" } = err;
+  res.status(status).send(message);
+})
+;
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);

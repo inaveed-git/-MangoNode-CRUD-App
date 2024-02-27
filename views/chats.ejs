@@ -39,6 +39,11 @@
           <form method="POST" action="/chats/<%=chat._id%>?_method=DELETE">
             <button class="Deletebtn">Delete</button>
           </form>
+
+
+          <form method="get" action="/chats/<%=chat._id%>/show">
+            <button class="Deletebtn">View</button>
+          </form>
         </div>
         <p>To: <%= chat.to %></p>
         <div class="timeDate">
