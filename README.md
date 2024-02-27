@@ -41,7 +41,11 @@ Ensure that you have Node.js and npm installed on your machine.
 
 ## MongoDB
 
-Make sure you have MongoDB installed and running. The application is configured to connect to a MongoDB database at `mongodb://127.0.0.1:27017/whatsapp`. Update the connection URL in `index.js` if needed.
+Make sure you have MongoDB installed and running. The application is configured to connect to a MongoDB database at `mongodb://127.0.0.1:27017/mangocrude`. Update the connection URL in `index.js` if needed.
+
+## Error Handling
+
+The backend includes an error handling mechanism to handle various errors that may occur during the application's execution. The error handler is implemented in the `app.use` middleware at the end of `index.js`. Any errors thrown during the application's operation will be caught, and an appropriate status code and error message will be sent in the response.
 
 ## Dependencies
 
@@ -49,7 +53,6 @@ Make sure you have MongoDB installed and running. The application is configured 
 - **mongoose**: MongoDB object modeling tool
 - **ejs**: Embedded JavaScript templating
 - **method-override**: Middleware for HTTP method override
-
 
 ## License
 
@@ -62,5 +65,6 @@ Feel free to contribute to the project by submitting issues or pull requests.
 ## Acknowledgments
 
 - This project was inspired by the need for a simple CRUD application using Node.js and MongoDB.
+```
 
-
+Feel free to customize it further based on your project's specifics!
